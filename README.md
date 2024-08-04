@@ -9,7 +9,7 @@ Data-driven modeling project on Spectroscopy datasets, FTIR, NMR, and GPC to dev
  2. Each subfolder in Project Deliverables folder contains three subfolders each corresponding to FTIR, NMR, and GPC with its own dataset as .csv file and two jupyter notebooks in each folder one for Naive and the other for Dynamic Binning
  3. Plots folder contains plots obtained from three spectroscopy analyses.
  
- ## Peaks identified from FTIR, NMR, and GPC Datasets
+ ### Peaks identified from FTIR, NMR, and GPC Datasets
  ![FTIR Peak Finding](Plots/FTIR_Peak%20Finding.png)
  ![NMR Peak Finding](Plots/NMR_Peak%20Finding.png)
  ![GPC Peak Finding](Plots/GPC_Peak%20Finding.png)
