@@ -14,5 +14,6 @@ Data-driven modeling project on Spectroscopy datasets, FTIR, NMR, and GPC to dev
  ### Peaks identified from FTIR, NMR, and GPC Datasets
  ![FTIR Peak Finding](Plots/FTIR_Peak%20Finding.png)
  ![NMR Peak Finding](Plots/NMR_Peak%20Finding.png)
+ ![NMR Peak Finding on No Water Peak](Plots/NMR_Peak%20Finding_No%20Water%20Peak.png)
  ![GPC Peak Finding](Plots/GPC_Peak%20Finding.png)
 
