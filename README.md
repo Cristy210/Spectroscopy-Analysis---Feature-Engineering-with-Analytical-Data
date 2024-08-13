@@ -17,3 +17,7 @@ Data-driven modeling project on Spectroscopy datasets, FTIR, NMR, and GPC to dev
  ![NMR Peak Finding on No Water Peak](Plots/NMR_Peak%20Finding_No%20Water%20Peak.png)
  ![GPC Peak Finding](Plots/GPC_Peak%20Finding.png)
 
+### Prinicpal Component Loadings for FTIR, NMR and GPC Datasets
+![PC Loading NMR](Plots/PC%20Loadings_NMR.png)
+![PC Loading FTIR](Plots/PC%20Loadings_FTIR.png)
+![PC Loading GPC](Plots/PC%20Loadings_GPC.png)
