@@ -58,6 +58,9 @@ FTIR_abs_norm = (FTIR_abs .- min_FTIR_abs) ./ max_min_abs
 # ╔═╡ 264d24d9-d41c-4844-96aa-969569c23ed9
 FTIR_norm_mat = hcat([convert(Vector{Float64}, FTIR_abs_norm[:, i]) for i in 1:size(FTIR_abs_norm, 2)]...)
 
+# ╔═╡ 56d07cfc-4e7e-4922-83b4-0c7e1ded25ff
+FTIR_wave_mat = hcat([convert(Vector{Float64}, FTIR_wave[:, i]) for i in 1:size(FTIR_wave, 2)]...)
+
 # ╔═╡ 1f8acacd-80f4-4703-b526-7f6153945c71
 FTIR_abs_norm[1, :]
 
@@ -97,6 +100,7 @@ SciPy.signal.find_peaks(FTIR_norm_mat[1, :], prominence=0.0009)[1]
 # ╠═3d886335-1034-4f3f-8ddf-724a13263835
 # ╠═1eb82728-b8bc-43c8-a3a8-68416862573a
 # ╠═264d24d9-d41c-4844-96aa-969569c23ed9
+# ╠═56d07cfc-4e7e-4922-83b4-0c7e1ded25ff
 # ╠═1f8acacd-80f4-4703-b526-7f6153945c71
 # ╠═b5945ea4-4bb4-417a-ae65-d4c14c765d87
 # ╠═0e6e6fd0-4d68-442a-955c-66e6bb3bb9fc
