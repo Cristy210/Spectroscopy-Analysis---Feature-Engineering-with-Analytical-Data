@@ -74,7 +74,12 @@ FTIR_norm_mat[1, :]
 peak_locs = [spy_sig.find_peaks(FTIR_norm_mat[i, :], prominence=0.0009)[1] for i in 1:size(FTIR_norm_mat, 1)]
 
 # ╔═╡ 031e1919-bac6-490b-905d-82a82fe6f74c
+with_theme() do
+	fig = Figure(; size=(800, 600))
+	ax = Axis(fig[1, 1], yreversed=true, aspect=DataAspect(), xlabel="Wavelength", ylabel="Absorbance")
 
+
+end
 
 # ╔═╡ 33defb9d-a55b-4a2c-a4a7-7e78df473a48
 md"""
