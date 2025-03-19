@@ -4,11 +4,23 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    #! format: off
+    quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+    #! format: on
+end
+
 # ╔═╡ 1a324b3f-c68f-4e02-913f-0e14a6b3c4dc
 import Pkg; Pkg.activate(@__DIR__)
 
 # ╔═╡ 549a6db9-85b3-47f7-b2c1-dcc25ec6621d
-using LinearAlgebra, CSV, CairoMakie, DataFrames, SciPy, PyCall
+using LinearAlgebra, CSV, CairoMakie, DataFrames, SciPy, PyCall, PlutoUI
 
 # ╔═╡ 32c11fd3-09f3-491c-8337-250afe3acbd6
 html"""<style>
@@ -73,12 +85,47 @@ FTIR_norm_mat[1, :]
 # ╔═╡ 7ff855aa-7138-4396-baec-faa9d0b0773c
 peak_locs = [spy_sig.find_peaks(FTIR_norm_mat[i, :], prominence=0.0009)[1] for i in 1:size(FTIR_norm_mat, 1)]
 
+# ╔═╡ 2eed5769-d968-42c6-9c3b-ff57aba8abc9
+FTIR_wave_mat[1, :][peak_locs[1]]
+
 # ╔═╡ 031e1919-bac6-490b-905d-82a82fe6f74c
 with_theme() do
-	fig = Figure(; size=(800, 600))
-	ax = Axis(fig[1, 1], yreversed=true, aspect=DataAspect(), xlabel="Wavelength", ylabel="Absorbance")
+	fig = Figure(; size=(1300, 900))
+	# fig_1 = Label(fig[1, 1], "FTIR - Peak Identification")
+	grid_peaks = GridLayout(fig[1, 1]; nrow=4, ncol=3)
+	n_samples = size(FTIR_norm_mat, 1)
+	nrow, ncol = 4, 3
+	k=0
 
+	for row in 1:nrow, col in 1:ncol
+		k += 1
+		if k > n_samples
+			break
+		end
+		ax = Axis(grid_peaks[row, col], title = "Sample $k", xlabel = "Wavenumber", ylabel = "Absorbance", xreversed = true)
+		lines!(ax, FTIR_wave_mat[k, :], FTIR_norm_mat[k, :], color=(:blue, 5))
+		scatter!(ax, FTIR_wave_mat[k, :][peak_locs[k]], FTIR_norm_mat[k, :][peak_locs[k]]; marker = :x, color = :red)
+	end
 
+	fig
+
+end
+
+# ╔═╡ fb35643c-1d39-4e52-9e7a-15bf41fe8177
+md"""
+### Select the Sample
+"""
+
+# ╔═╡ a69adc69-c1e6-48bc-9786-bd6430bea240
+@bind sample PlutoUI.Slider(1:size(FTIR_norm_mat, 1); show_value=true)
+
+# ╔═╡ fda184e9-2d26-425b-9652-e9e4af3f2004
+with_theme() do
+	fig = Figure(; size=(1000, 700))
+	ax = Axis(fig[1, 1], title="FTIR Sample Peak", xlabel ="wavenumber", ylabel = "Absorbance", xreversed=true)
+	lines!(ax, FTIR_wave_mat[sample, :], FTIR_norm_mat[sample, :], color=(:blue, 5))
+	scatter!(ax, FTIR_wave_mat[sample, :][peak_locs[sample]], FTIR_norm_mat[sample, :][peak_locs[sample]]; marker= :x, color=:red)
+	fig
 end
 
 # ╔═╡ 33defb9d-a55b-4a2c-a4a7-7e78df473a48
@@ -110,6 +157,10 @@ SciPy.signal.find_peaks(FTIR_norm_mat[1, :], prominence=0.0009)[1]
 # ╠═b5945ea4-4bb4-417a-ae65-d4c14c765d87
 # ╠═0e6e6fd0-4d68-442a-955c-66e6bb3bb9fc
 # ╠═7ff855aa-7138-4396-baec-faa9d0b0773c
+# ╠═2eed5769-d968-42c6-9c3b-ff57aba8abc9
 # ╠═031e1919-bac6-490b-905d-82a82fe6f74c
+# ╟─fb35643c-1d39-4e52-9e7a-15bf41fe8177
+# ╠═a69adc69-c1e6-48bc-9786-bd6430bea240
+# ╠═fda184e9-2d26-425b-9652-e9e4af3f2004
 # ╟─33defb9d-a55b-4a2c-a4a7-7e78df473a48
 # ╠═71045e2b-4733-4e0f-9d56-9bf60e9b4569
