@@ -20,7 +20,7 @@ end
 import Pkg; Pkg.activate(@__DIR__)
 
 # ╔═╡ 549a6db9-85b3-47f7-b2c1-dcc25ec6621d
-using LinearAlgebra, CSV, CairoMakie, DataFrames, SciPy, PyCall, PlutoUI
+using LinearAlgebra, CSV, CairoMakie, DataFrames, SciPy, PyCall, PlutoUI, ScikitLearn, Colors
 
 # ╔═╡ 32c11fd3-09f3-491c-8337-250afe3acbd6
 html"""<style>
@@ -36,6 +36,9 @@ main {
 
 # ╔═╡ 39e36f7a-584d-4188-92be-e49c4297d891
 spy_sig = pyimport("scipy.signal")
+
+# ╔═╡ 53ba94c5-ebca-4a66-8214-5de148d0e62c
+sklearn_decomp = pyimport("sklearn.decomposition")
 
 # ╔═╡ 526cad54-68ce-48a0-80bf-39bbd9b166af
 FTIR_dir = joinpath(@__DIR__, "Project Deliverables", "FTIR", "FTIR_data.csv")
@@ -133,14 +136,42 @@ md"""
 ### Rough Work
 """
 
+# ╔═╡ b81ed517-0620-4342-a182-f40954ddde93
+pca_10 = sklearn_decomp.PCA(n_components=10)
+
+# ╔═╡ 7da89678-e1e0-49bd-9028-542c4f11fa7a
+pca_2 = sklearn_decomp.PCA(n_components=2)
+
+# ╔═╡ 16fd8c1a-a244-4796-b2c8-e7282292a83b
+prin_components_10 = pca_10.fit_transform(FTIR_norm_mat)
+
+# ╔═╡ 3a2d9487-099e-4e5e-a047-fd4db2ccce07
+prin_components_2 = pca_2.fit_transform(FTIR_norm_mat)
+
+# ╔═╡ c8ebdad1-4c93-4c19-9315-185351270091
+palette = distinguishable_colors(12)
+
+# ╔═╡ 49b5c843-780c-42cf-aa83-2b46eabea9c7
+with_theme() do
+	fig = Figure(; size=(700, 300))
+	ax = Axis(fig[1, 1], aspect=DataAspect(), yreversed=true)
+	palette = distinguishable_colors(12)
+	for i in  1:12
+		scatter!(ax, prin_components_2[i, 1], prin_components_2[i, 2], color=palette[i], markersize=10, label = "Row $i")
+	end
+	axislegend(ax, position = :rb)
+	fig
+end
+
 # ╔═╡ 71045e2b-4733-4e0f-9d56-9bf60e9b4569
-SciPy.signal.find_peaks(FTIR_norm_mat[1, :], prominence=0.0009)[1]
+spy_sig.find_peaks(FTIR_norm_mat[1, :], prominence=0.0009)[1]
 
 # ╔═╡ Cell order:
 # ╟─32c11fd3-09f3-491c-8337-250afe3acbd6
 # ╠═1a324b3f-c68f-4e02-913f-0e14a6b3c4dc
 # ╠═549a6db9-85b3-47f7-b2c1-dcc25ec6621d
 # ╠═39e36f7a-584d-4188-92be-e49c4297d891
+# ╠═53ba94c5-ebca-4a66-8214-5de148d0e62c
 # ╠═526cad54-68ce-48a0-80bf-39bbd9b166af
 # ╠═6b2c291d-b6c5-44f6-b08a-e3fba0f7841d
 # ╠═d17c3bae-d3f5-483f-9df6-f5a83c797412
@@ -163,4 +194,10 @@ SciPy.signal.find_peaks(FTIR_norm_mat[1, :], prominence=0.0009)[1]
 # ╠═a69adc69-c1e6-48bc-9786-bd6430bea240
 # ╠═fda184e9-2d26-425b-9652-e9e4af3f2004
 # ╟─33defb9d-a55b-4a2c-a4a7-7e78df473a48
+# ╠═b81ed517-0620-4342-a182-f40954ddde93
+# ╠═7da89678-e1e0-49bd-9028-542c4f11fa7a
+# ╠═16fd8c1a-a244-4796-b2c8-e7282292a83b
+# ╠═3a2d9487-099e-4e5e-a047-fd4db2ccce07
+# ╠═c8ebdad1-4c93-4c19-9315-185351270091
+# ╠═49b5c843-780c-42cf-aa83-2b46eabea9c7
 # ╠═71045e2b-4733-4e0f-9d56-9bf60e9b4569
